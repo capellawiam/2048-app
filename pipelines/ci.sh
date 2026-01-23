@@ -23,4 +23,5 @@ pnpm vitest run
 echo "Build package (Nuxt - Vite)"
 pnpm nuxi build
 
+echo "everythiiing is goood"
 
