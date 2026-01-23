@@ -11,7 +11,7 @@ pnpm install
 echo "Dependencies installed"
 
 echo "Type checking"
-pnpm vue-tsc --noEmit --project tsconfig.json
+pnpm vue-tsc --noEmit --project .nuxt/tsconfig.json
 
 echo "Linting"
 pnpm eslint "**/*.{vue,ts,js}"
