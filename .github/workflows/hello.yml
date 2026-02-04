@@ -1,0 +1,15 @@
+name: Run Lab 2 Script
+
+on:
+  push:
+    branches:
+      - lab3
+
+jobs:
+  run_lab2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Execute lab2 script
+        run: bash lab02/lab2.sh
