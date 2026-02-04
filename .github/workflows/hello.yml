@@ -12,4 +12,5 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Execute lab2 script
-        run: bash lab02/lab2.sh
+        run: ./pipelines/ci.sh
+
