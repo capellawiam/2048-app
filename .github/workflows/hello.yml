@@ -21,28 +21,23 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
-
       - name: Install dependencies
         run: pnpm install
 
-  
       - name: Type checking
         run: pnpm vue-tsc --noEmit --project .nuxt/tsconfig.json
-
 
       - name: Linting
         run: pnpm exec eslint "**/*.{vue,ts,js}"
 
-  
       - name: Unit tests
         run: pnpm vitest run
 
-  
       - name: Build package
         run: pnpm nuxi build
-        
+
       - name: Upload build artifact
-       uses: actions/upload-artifact@v4
-         with:
-           name: nuxt-build
-            path: .output/
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuxt-build
+          path: .output/
