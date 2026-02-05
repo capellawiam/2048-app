@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - lab3
       - "feature/**"
   schedule:
     - cron: "0 6 * * *"
