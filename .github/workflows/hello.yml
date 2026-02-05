@@ -1,100 +1,70 @@
-name: CI  Lab 2
+name: CI – Lab 2
 
 on:
   push:
     branches:
       - main
-      - lab3
       - "feature/**"
   schedule:
     - cron: "0 6 * * *"
+  workflow_dispatch:
 
 jobs:
   install:
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js with pnpm cache
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-  
-  typecheck:
-    runs-on: ubuntu-latest
-    needs: install
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
+      - run: npm install -g pnpm
+      - run: pnpm install
 
-      - name: Type checking
-        run: pnpm vue-tsc --noEmit --project .nuxt/tsconfig.json
-
+  typecheck:
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+      - run: pnpm vue-tsc --noEmit --project .nuxt/tsconfig.json
 
   lint:
     runs-on: ubuntu-latest
     needs: install
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
-
-      - name: Linting
-        run: pnpm exec eslint "**/*.{vue,ts,js}"
-
+      - run: pnpm exec eslint "**/*.{vue,ts,js}"
 
   tests:
     runs-on: ubuntu-latest
     needs: install
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
-
-      - name: Unit tests
-        run: pnpm vitest run
-
+      - run: pnpm vitest run
 
   build:
     runs-on: ubuntu-latest
     needs: [typecheck, lint, tests]
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
-
-      - name: Build package
-        run: pnpm nuxi build
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+      - run: pnpm nuxi build
+      - uses: actions/upload-artifact@v4
         with:
           name: nuxt-build
           path: .output/server/index.mjs
