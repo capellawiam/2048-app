@@ -1,4 +1,4 @@
-name: CI – Lab 2
+name: CI  Lab 2
 
 on:
   push:
