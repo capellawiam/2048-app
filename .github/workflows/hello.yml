@@ -32,42 +32,76 @@ jobs:
     runs-on: ubuntu-latest
     needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: pnpm vue-tsc --noEmit --project .nuxt/tsconfig.json
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Type checking
+        run: pnpm vue-tsc --noEmit --project .nuxt/tsconfig.json
 
   lint:
     runs-on: ubuntu-latest
     needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: pnpm exec eslint "**/*.{vue,ts,js}"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Linting
+        run: pnpm exec eslint "**/*.{vue,ts,js}"
 
   tests:
     runs-on: ubuntu-latest
     needs: install
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: pnpm vitest run
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Unit tests
+        run: pnpm vitest run
 
   build:
     runs-on: ubuntu-latest
     needs: [typecheck, lint, tests]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: pnpm nuxi build
-      - uses: actions/upload-artifact@v4
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Build package
+        run: pnpm nuxi build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
           name: nuxt-build
           path: .output/server/index.mjs
