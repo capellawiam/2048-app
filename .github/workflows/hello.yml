@@ -1,4 +1,4 @@
-name: Run Lab 2 Script
+name: CI – Lab 2
 
 on:
   push:
@@ -6,10 +6,12 @@ on:
       - lab3
 
 jobs:
-  run_lab2:
+  ci:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -19,5 +21,29 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: Run CI script
-        run: ./pipelines/ci.sh
+
+      - name: Install dependencies
+        run: pnpm install
+
+  
+      - name: Type checking
+        run: pnpm vue-tsc --noEmit --project .nuxt/tsconfig.json
+
+
+      - name: Linting
+        run: pnpm exec eslint "**/*.{vue,ts,js}"
+
+  
+      - name: Unit tests
+        run: pnpm vitest run
+
+  
+      - name: Build package
+        run: pnpm nuxi build
+
+  
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuxt-build
+          path: .output/
