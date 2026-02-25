@@ -1,8 +1,5 @@
 name: CI – Lab 4
 
-env:
-  NODE_VERSION: 20
-
 on:
   push:
     branches:
@@ -25,16 +22,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v2
         with:
           version: 9
-
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
           cache: 'pnpm'
-
       - run: pnpm install
 
   build:
@@ -42,25 +36,20 @@ jobs:
     needs: install
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v2
         with:
           version: 9
-
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
           cache: 'pnpm'
-
       - run: pnpm install
       - run: pnpm nuxi build
-
       - if: github.event_name == 'push'
         uses: actions/upload-artifact@v4
         with:
           name: nuxt-build
           path: .output/server/index.mjs
-          retention-days: ${{ github.ref == 'refs/heads/main' && 7 || 1 }}
 
   lint:
     if: github.event_name == 'pull_request'
@@ -73,7 +62,7 @@ jobs:
           version: 9
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm exec eslint "**/*.{vue,ts,js}"
@@ -89,7 +78,7 @@ jobs:
           version: 9
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm vue-tsc --noEmit --project .nuxt/tsconfig.json
@@ -105,7 +94,7 @@ jobs:
           version: 9
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm vitest run
