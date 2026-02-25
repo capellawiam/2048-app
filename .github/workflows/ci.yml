@@ -1,4 +1,4 @@
-name: CI – Lab 2
+name: CI – Lab 4
 
 on:
   push:
@@ -17,124 +17,60 @@ on:
   workflow_dispatch:
 
 jobs:
-  install:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-          
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-          
-      - name: Install dependencies
-        run: pnpm install
 
-  typecheck:
+  setup:
     runs-on: ubuntu-latest
-    needs: install
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
         with:
           version: 9
-          
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-          
-      - name: Install dependencies
-        run: pnpm install
-        
-      - name: Type checking
-        run: pnpm vue-tsc --noEmit --project .nuxt/tsconfig.json
+      - run: pnpm install
 
   lint:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    needs: install
+    needs: setup
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-          
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-          
-      - name: Install dependencies
-        run: pnpm install
-        
-      - name: Linting
-        run: pnpm exec eslint "**/*.{vue,ts,js}"
+      - uses: actions/checkout@v4
+      - run: pnpm exec eslint "**/*.{vue,ts,js}"
+
+  typecheck:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v4
+      - run: pnpm vue-tsc --noEmit --project .nuxt/tsconfig.json
 
   tests:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    needs: install
+    needs: setup
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-          
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-          
-      - name: Install dependencies
-        run: pnpm install
-        
-      - name: Unit tests
-        run: pnpm vitest run
+      - uses: actions/checkout@v4
+      - run: pnpm vitest run
 
-  build:
+  build-pr:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    needs: [typecheck, lint, tests]
+    needs: [lint, typecheck, tests]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-          
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-          
-      - name: Install dependencies
-        run: pnpm install
-        
-      - name: Build package
-        run: pnpm nuxi build
-        
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/checkout@v4
+      - run: pnpm nuxi build
+
+  build-main:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v4
+      - run: pnpm nuxi build
+      - uses: actions/upload-artifact@v4
         with:
           name: nuxt-build
           path: .output/server/index.mjs
