@@ -4,10 +4,15 @@ on:
   push:
     branches:
       - main
-      - lab3
-      - "feature/**"
-  schedule:
-    - cron: "0 6 * * *"
+    paths-ignore:
+      - 'docs/**'
+
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+
   workflow_dispatch:
 
 jobs:
