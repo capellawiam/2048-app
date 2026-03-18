@@ -1,4 +1,4 @@
-name: CI – Lab 4
+name: CI – Lab 5
 
 env:
   NODE_VERSION: 20
@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - main
-      - lab4
+      - lab05
     paths-ignore:
       - 'docs/**'
 
