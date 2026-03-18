@@ -1,4 +1,4 @@
-name: CI – Lab 5
+name: CI – Lab 05
 
 env:
   NODE_VERSION: 20
