@@ -1,0 +1,5 @@
+J'ai commencé le TP en installant Azure CLI sur Ubuntu. Au début, la commande "az" ne fonctionnait pas, donc j’ai dû installer l’outil puis vérifier avec "az version". Ensuite, je me suis connectée à mon compte Azure avec "az login --use-device-code", ce qui a bien marché. J’ai aussi vérifié ma souscription Azure for Students avec "az account show". Après ça, j’ai créé un resource group appelé "rg-2048-prod", qui servira pour l’environnement de production.
+
+Ensuite, j’ai essayé de créer une Static Web App avec la commande Azure CLI. Mais j’ai rencontré un problème important : certaines régions sont bloquées par des règles Azure liées à ma souscription. Par exemple, la région "westeurope" est refusée par une policy. Pour l’instant, je n’ai pas encore trouvé une région autorisée, donc j’attends de voir quelle région sera acceptée par Microsoft pour pouvoir continuer.
+
+En résumé, j’ai réussi à installer Azure CLI et à me connecter à mon compte, mais je suis bloquée pour créer la Static Web App à cause des restrictions de région.
