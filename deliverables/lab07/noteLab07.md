@@ -1,4 +1,5 @@
 Note de lab07
+"index.ts " se trouve dans le dossier "infra" et c’est le fichier principal de la stack Pulumi.
 
 Au début du lab07, je ne savais pas vraiment à quoi servait Pulumi, car c’était la première fois que je l’utilisais. J’ai donc commencé par essayer de comprendre son rôle. J’ai compris que Pulumi permet de décrire et de déployer une infrastructure cloud directement avec du code.
 
