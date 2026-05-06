@@ -239,7 +239,8 @@ jobs:
 
       - run: pnpm install
 
-      - run: pnpm generate
+      - run: pnpm nuxi build
+      - run: pnpm nuxi generate
 
       - uses: Azure/static-web-apps-deploy@v1
         with:
@@ -247,5 +248,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: upload
           app_location: ".output/public"
-          output_location: ""
           skip_app_build: true
