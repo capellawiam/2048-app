@@ -247,5 +247,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: upload
           app_location: "/"
-          output_location: ".output/public"
+          output_location: ".output/public/index.html"
           skip_app_build: true
